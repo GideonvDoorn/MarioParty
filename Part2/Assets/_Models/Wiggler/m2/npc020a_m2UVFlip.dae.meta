@@ -1,0 +1,201 @@
+fileFormatVersion: 2
+guid: 66f19910d39d9e24fb408f9681bf5cbb
+timeCreated: 1510159287
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: c_body_a
+    100002: c_body_b
+    100004: c_body_c
+    100006: c_body_d
+    100008: c_flower
+    100010: c_head
+    100012: c_mouth
+    100014: c_mouth_up
+    100016: c_nose
+    100018: c_stalk
+    100020: eye01
+    100022: eye2
+    100024: head_angry
+    100026: head_normal
+    100028: L_ankle_a
+    100030: L_ankle_b
+    100032: L_ankle_c
+    100034: L_ankle_d
+    100036: L_cheek
+    100038: L_leaf
+    100040: L_leg_a_1
+    100042: L_leg_a_2
+    100044: L_leg_b_1
+    100046: L_leg_b_2
+    100048: L_leg_c_1
+    100050: L_leg_c_2
+    100052: L_leg_d_1
+    100054: L_leg_d_2
+    100056: mesh0000
+    100058: mesh0001
+    100060: mesh0002
+    100062: mesh0003
+    100064: mesh0004
+    100066: mesh0005
+    100068: //RootNode
+    100070: nw4r_root
+    100072: origin
+    100074: polygon_all
+    100076: R_ankle_a
+    100078: R_ankle_b
+    100080: R_ankle_c
+    100082: R_ankle_d
+    100084: R_cheek
+    100086: R_leaf
+    100088: R_leg_a_1
+    100090: R_leg_a_2
+    100092: R_leg_b_1
+    100094: R_leg_b_2
+    100096: R_leg_c_1
+    100098: R_leg_c_2
+    100100: R_leg_d_1
+    100102: R_leg_d_2
+    100104: skl_root
+    400000: c_body_a
+    400002: c_body_b
+    400004: c_body_c
+    400006: c_body_d
+    400008: c_flower
+    400010: c_head
+    400012: c_mouth
+    400014: c_mouth_up
+    400016: c_nose
+    400018: c_stalk
+    400020: eye01
+    400022: eye2
+    400024: head_angry
+    400026: head_normal
+    400028: L_ankle_a
+    400030: L_ankle_b
+    400032: L_ankle_c
+    400034: L_ankle_d
+    400036: L_cheek
+    400038: L_leaf
+    400040: L_leg_a_1
+    400042: L_leg_a_2
+    400044: L_leg_b_1
+    400046: L_leg_b_2
+    400048: L_leg_c_1
+    400050: L_leg_c_2
+    400052: L_leg_d_1
+    400054: L_leg_d_2
+    400056: mesh0000
+    400058: mesh0001
+    400060: mesh0002
+    400062: mesh0003
+    400064: mesh0004
+    400066: mesh0005
+    400068: //RootNode
+    400070: nw4r_root
+    400072: origin
+    400074: polygon_all
+    400076: R_ankle_a
+    400078: R_ankle_b
+    400080: R_ankle_c
+    400082: R_ankle_d
+    400084: R_cheek
+    400086: R_leaf
+    400088: R_leg_a_1
+    400090: R_leg_a_2
+    400092: R_leg_b_1
+    400094: R_leg_b_2
+    400096: R_leg_c_1
+    400098: R_leg_c_2
+    400100: R_leg_d_1
+    400102: R_leg_d_2
+    400104: skl_root
+    4300000: mesh0000
+    4300002: mesh0001
+    4300004: mesh0002
+    4300006: mesh0003
+    4300008: mesh0004
+    4300010: mesh0005
+    9500000: //RootNode
+    13700000: mesh0000
+    13700002: mesh0001
+    13700004: mesh0002
+    13700006: mesh0003
+    13700008: mesh0004
+    13700010: mesh0005
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

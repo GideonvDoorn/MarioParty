@@ -1,0 +1,20 @@
+# Material file for mariopiece.obj
+
+newmtl mesh0071mat
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd t0071_0.png
+
+newmtl mesh0078mat
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd t0072_0.png
+

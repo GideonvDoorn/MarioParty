@@ -1,0 +1,97 @@
+newmtl _1aadb1e.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd flag.png
+map_d flag.png
+
+newmtl _4a6dc8e.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd foliage1.png
+map_d foliage1.png
+
+newmtl _51b3183.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd foliage2.png
+map_d foliage2.png
+
+newmtl fad091fa.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd tree.png
+
+newmtl _8dc130d.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd fence.png
+
+newmtl _510abe5.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd rock3.png
+
+newmtl _12060ff.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd flagstand.png
+
+newmtl ac78a54a.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd pipe.png
+
+newmtl _ac68f8b.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd flagpolecap.png
+
+newmtl _d4bfb80.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd flagpole.png
+
+newmtl _ab86c5f.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd castle4.png
+
+newmtl fe208a88.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd castle5.png
+
+newmtl df83d6de.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd castle3.png
+
+newmtl d0ac0fe6.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd castle2.png
+
+newmtl e36be28a.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd castle6.png
+
+newmtl _115271c.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd castle1.png
+
+newmtl _c432e49.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd ledge.png
+
+newmtl c55bcef5.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd grass2.png
+
+newmtl _dc07196.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd underside2.png

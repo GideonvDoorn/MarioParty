@@ -1,0 +1,35 @@
+newmtl a0dd1fdf.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd grass.png
+
+newmtl fc2ea868.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd edge.png
+
+newmtl fddcfb72.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd flower.png
+map_d flower.png
+
+newmtl d6a2bfec.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd block1.png
+
+newmtl f1e1c868.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd block4.png
+
+newmtl df362561.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd block2.png
+
+newmtl _93adf82.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd block3.png

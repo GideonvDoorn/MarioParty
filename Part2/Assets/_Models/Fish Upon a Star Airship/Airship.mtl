@@ -1,0 +1,15 @@
+newmtl _73337a4.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd Propeller.png
+map_d Propeller.png
+
+newmtl c02c9b0f.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd ShyGuy.png
+
+newmtl _86859f0.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd Airship.png

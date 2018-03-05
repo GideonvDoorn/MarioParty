@@ -1,0 +1,15 @@
+newmtl c32e2bb5.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd tree.png
+map_d tree.png
+
+newmtl _5815b90.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd trunk.png
+
+newmtl _357f66d.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd cloud.png

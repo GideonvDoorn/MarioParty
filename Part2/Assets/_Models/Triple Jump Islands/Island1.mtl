@@ -1,0 +1,78 @@
+newmtl _4a6dc8e.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd foliage1.png
+map_d foliage1.png
+
+newmtl _51b3183.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd foliage2.png
+map_d foliage2.png
+
+newmtl ca5a033f.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd berry.png
+map_d berry.png
+
+newmtl abc7056c.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd waves.png
+map_d waves.png
+
+newmtl dad6641a.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd waterfall1.png
+
+newmtl _94cb623.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd waterfall2.png
+
+newmtl a069e6b3.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd rainbow.png
+
+newmtl _c8ac803.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd rock 1.png
+
+newmtl b1b29696.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd rock2.png
+
+newmtl _8dc130d.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd fence.png
+
+newmtl _c432e49.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd ledge.png
+
+newmtl _9521c06.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd water.png
+
+newmtl cfa83677.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd grass1.png
+
+newmtl ae30a4dc.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd underside1.png
+
+newmtl fad091fa.png
+Kd 0.800000 0.800000 0.800000
+illum 1
+map_Kd tree.png

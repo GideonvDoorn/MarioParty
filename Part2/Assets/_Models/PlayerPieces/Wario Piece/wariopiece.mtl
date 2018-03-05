@@ -1,0 +1,20 @@
+# Material file for wariopiece.obj
+
+newmtl mesh0076mat
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd t0080_0.png
+
+newmtl mesh0079mat
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd t0079_0.png
+
