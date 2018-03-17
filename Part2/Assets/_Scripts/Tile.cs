@@ -8,15 +8,21 @@ public class Tile: MonoBehaviour{
     public int branchIndex = -1;
     public TileType tileType;
 
+    private BoardData boardData;
+
     public int getNextTileIndex()
     {
         return tileIndex + 1;
     }
 
+    void Awake()
+    {
+        boardData = GetComponentInParent<BoardData>();
+    }
+
     public void ChangeIntoTile(TileType tile)
     {
-
-        //TODO: Should change material instead of color
+        //changes material and type of tile
         Renderer tileMat = transform.Find("TileVisual").GetComponent<Renderer>();
         switch (tile)
         {
@@ -25,19 +31,20 @@ public class Tile: MonoBehaviour{
                 break;
             case TileType.BlueTile:
                 this.tileType = tile;
-                tileMat.material.SetColor("_Color", Color.blue);
+                //tileMat.material.SetColor("_Color", Color.blue);
+                tileMat.material = boardData.BlueTileMaterial;
                 break;
             case TileType.RedTile:
                 this.tileType = tile;
-                tileMat.material.SetColor("_Color", Color.red);
+                tileMat.material = boardData.RedTileMaterial;
                 break;
             case TileType.StarTile:
                 this.tileType = tile;
-                tileMat.material.SetColor("_Color", Color.yellow);
+                tileMat.material = boardData.StarTileMaterial;
                 break;
             case TileType.BranchTile:
                 this.tileType = tile;
-                tileMat.material.SetColor("_Color", Color.magenta);
+                tileMat.material = boardData.BranchTileMaterial;
                 break;
             default:
                 break;

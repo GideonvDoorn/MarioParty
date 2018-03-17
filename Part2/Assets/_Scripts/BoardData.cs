@@ -6,16 +6,12 @@ public class BoardData : MonoBehaviour {
 
     public int[] LegalStarSpawnTiles;
 
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    [Header("Tile Materials")]
+    public Material BlueTileMaterial;
+    public Material RedTileMaterial;
+    public Material StarTileMaterial;
+    public Material BranchTileMaterial;
+    public Material EventTileMaterial;
 
     public int getRandomStarTile(int lastStarTile)
     {

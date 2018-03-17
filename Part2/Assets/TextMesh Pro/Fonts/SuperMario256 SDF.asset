@@ -913,7 +913,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: SuperMario256 SDF Material
   m_Shader: {fileID: 4800000, guid: dca26082f9cb439469295791d9f76fe5, type: 3}
-  m_ShaderKeywords: BEVEL_ON UNDERLAY_ON
+  m_ShaderKeywords: BEVEL_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -944,7 +944,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Ambient: 0.494
+    - _Ambient: 0.509
     - _Bevel: 0.923
     - _BevelClamp: 0
     - _BevelOffset: 0
@@ -953,7 +953,7 @@ Material:
     - _BumpFace: 0
     - _BumpOutline: 0
     - _ColorMask: 15
-    - _Diffuse: 0.497
+    - _Diffuse: 0.407
     - _FaceDilate: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
@@ -962,7 +962,7 @@ Material:
     - _GlowOuter: 0.05
     - _GlowPower: 0.75
     - _GradientScale: 6
-    - _LightAngle: 2.25
+    - _LightAngle: 2.19
     - _MaskSoftnessX: 0
     - _MaskSoftnessY: 0
     - _OutlineSoftness: 0
@@ -970,14 +970,14 @@ Material:
     - _OutlineUVSpeedY: 0
     - _OutlineWidth: 0.303
     - _PerspectiveFilter: 0.875
-    - _Reflectivity: 9.94
+    - _Reflectivity: 9.4
     - _ScaleRatioA: 0.8333333
     - _ScaleRatioB: 0.6770833
-    - _ScaleRatioC: 0.67304504
+    - _ScaleRatioC: 0.6246156
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
-    - _SpecularPower: 1.98
+    - _SpecularPower: 1.91
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -985,7 +985,7 @@ Material:
     - _StencilWriteMask: 255
     - _TextureHeight: 512
     - _TextureWidth: 512
-    - _UnderlayDilate: 0.006
+    - _UnderlayDilate: 0.084
     - _UnderlayOffsetX: 1
     - _UnderlayOffsetY: -1
     - _UnderlaySoftness: 0

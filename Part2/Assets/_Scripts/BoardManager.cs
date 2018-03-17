@@ -16,17 +16,21 @@ public class BoardManager : MonoBehaviour
     public DialogueManager dialogueManager;
     public GameObject DiceCounter;
     public GameObject TurnBanner;
-    public GameObject Star;
+    public GameObject DiceBlock;
+
     
     //Containers
     private Player[] players;
     private GameObject loadedBoard;
+    private GameObject spawnedDiceBlock;
+    private GameObject Star;
 
     //States
-    private bool turnEnd =true;
+    private bool turnEnd = true;
+    private bool startTurnInput = false;
 
     //Settings
-    private float starheight = 1.5f;
+    public float starheight;
     private int numPlayers = 4;
 
     //Getter functions
@@ -57,18 +61,11 @@ public class BoardManager : MonoBehaviour
         {
             return players[TurnManager.currentPlayerIndex];
         }
-        //else if (TurnManager.currentPlayerIndex == 4)
-        //{
-        //    //Player 4 was meant, index get reset when it reaches 4 since that is out of bounds
-        //    //there might be a slight interval between incrementing the index to 4 and resettig it to 0
-        //    //So this must always return playerindex3
-        //    return players[3];
-        //}
         return null;
     }
     public Tile getTileByType(TileType type)
     {
-        //Searches by type, usually will be used for finding star/ begintile (Begintile should always be indexed at 0 though)
+        //Searches by type, usually will be used for finding star/ begintile
 
         Tile Tile = null;
         foreach (Transform tile in this.transform.Find("Board" + TurnManager.boardIndex).Find("Tiles"))
@@ -94,7 +91,7 @@ public class BoardManager : MonoBehaviour
         for (int i = currentTileIndex; i < currentTileIndex + movement; i++)
         {
             #region branching
-            //If tile has a branchindex specified and branch wasnt specified and the branch isnt a branchtile. This means this is the end of a branhing pathway.
+            //If tile has a branchindex specified and branch wasnt specified and the branch isnt a branchtile. This means this is the end of a branching pathway.
             //The specified branchindex is the reentering point for the player into the normal pathway
             //So the nextile will be the branch tile
             //This is also used to wrap around the map - branchindex of the last tile is specified as 1, so the player can restart the loop
@@ -176,6 +173,7 @@ public class BoardManager : MonoBehaviour
         //Turns will also loop within the TurnLoop. This happens from TurnLoop part 1 to TurnLoop part 3
 
         //TurnLoop part 0: Starts the turn loop
+
         StartCoroutine(StartTurn());
 
     }
@@ -213,31 +211,52 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public void SpawnDiceBlock()
+    {
+        spawnedDiceBlock = Instantiate(DiceBlock, new Vector3(getCurrentPlayer().transform.position.x, getCurrentPlayer().transform.position.y + 1.5f, getCurrentPlayer().transform.position.z), Quaternion.identity, getCurrentPlayer().transform);
+    }
+
     //Turnloop
     IEnumerator StartTurn()
     {
         //TurnLoop part 1: Starts a turn
-        //This code will play before a player has rolled his die
-        //It will wait in the while loop for the player to roll his die, there it will advance the turn loop
+        //This code will play before a player has inputted anything
+        //Right now show the turnbanner
         TurnBanner.SetActive(true);
-        TurnBanner.transform.Find("BannerText").GetComponent<Text>().text = "player " + (TurnManager.currentPlayerIndex+1) + " turn!";
-        //while(turnStart == false)
-        //{
-        //    yield return null;
-        //}
-        //TODO: make player jump
-        //getCurrentPlayer().transform.Find("PlayerVisual").transform.GetComponent<Animator>().SetTrigger("JumpTrigger");
+        TurnBanner.transform.Find("BannerText").GetComponent<Text>().text = "player " + (TurnManager.currentPlayerIndex + 1) + " turn!";
+
+        while(startTurnInput == false)
+        {
+            yield return null;
+        }
+        SpawnDiceBlock();
         while (TurnManager.TurnInProgress == false)
         {
             yield return null;
         }
-        TurnBanner.SetActive(false);
-        yield return new WaitForSeconds(1f);
 
+
+        ////TEST
+        //StartPlayerTurn();
+        yield return new WaitForSeconds(1f);
+        ////TEST
+        //StartPlayerTurn();
     }
+
+
+
     public void StartPlayerTurn()
     {
-        if (TurnManager.TurnInProgress == false & turnEnd == true && TurnManager.MinigameInProgress == false)
+        if(startTurnInput == false && TurnManager.TurnInProgress == false && TurnManager.MinigameInProgress == false)
+        {
+            startTurnInput = true;
+            TurnBanner.SetActive(false);
+
+
+            return;
+        }
+
+        if (startTurnInput == true && TurnManager.TurnInProgress == false & turnEnd == true && TurnManager.MinigameInProgress == false)
         {
             //TurnLoop part 2: Roll die and move player
             //The player has showed us that he wants to roll his die.
@@ -249,7 +268,9 @@ public class BoardManager : MonoBehaviour
             //turnEnd is a state just to fix a bug between the gap of turninprogress and playerswitching
             //turninprogress doesnt get set to false at the absolute end of a turn but before switching players (and has to keep doing that)
             //Thats why another state was necessary to have an absolute turnend state
+            Destroy(spawnedDiceBlock);
             turnEnd = false;
+            startTurnInput = false;
             TurnManager.TurnInProgress = true;
 
 
@@ -294,7 +315,7 @@ public class BoardManager : MonoBehaviour
         }
         
         //reset current player index, when every player had it's turn, else starts a new turn for the next player
-        //BUG! Sometimes a player can move twice by hammering the roll turn button, this is probably a gap in state turninprogress (right here)
+        //BUG! Sometimes a player can move twice by hammering the roll turn button
         //Fixed with turnEnd state
         if (TurnManager.currentPlayerIndex == 3)
         {
@@ -314,9 +335,11 @@ public class BoardManager : MonoBehaviour
 
         CalcAndUpdatePlayerRankings();
         turnEnd = true;
+        startTurnInput = false;
 
         ////TEST, loop game without user input
         //StartPlayerTurn();
+        
 
     }
     public void StartMiniGame()
@@ -431,11 +454,16 @@ public class BoardManager : MonoBehaviour
         //Find current startile and change it into a normal blue tile
         getTileByType(TileType.StarTile).ChangeIntoTile(TileType.BlueTile);
 
-        //Change newstartile into starTile
+        //Change new startile into starTile
         newStarTile.ChangeIntoTile(TileType.StarTile);
 
         //Sets the actual star location
         //TODO: animate star to this new tile
         Star.transform.position = newStarTile.transform.position + (Vector3.up * starheight);
+
+        //Debug star vs new tile position
+        Debug.Log("Star: X- " + Star.transform.position.x + "  y- " + Star.transform.position.y + "  z- " + Star.transform.position.z);
+        Debug.Log("New Tile: X- " + newStarTile.transform.position.x + "  y- " + newStarTile.transform.position.y + "  z- " + newStarTile.transform.position.z);
+
     }
 }

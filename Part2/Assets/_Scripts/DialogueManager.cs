@@ -43,7 +43,7 @@ public class DialogueManager : MonoBehaviour {
         BranchUI.SetActive(true);
 
         ////TEST, loop turn without player input
-        //if(UnityEngine.Random.Range(0,2) == 0)
+        //if (UnityEngine.Random.Range(0, 2) == 0)
         //{
         //    TriggerYes();
         //}

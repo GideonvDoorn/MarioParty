@@ -5,18 +5,23 @@ using UnityEngine;
 public class CameraBehaviour : MonoBehaviour {
 
 
-    //Camera will have different modes depending on what is happening (FIXME: for now these states are static but as we all know, statics are evil)
+    //Camera will have different modes depending on what is happening
     public static CameraMode cameraMode = CameraMode.FollowPlayer; 
 
 
     public BoardManager BM;
     public Transform CameraDefaultPos;
+    public float TiltedDownRotationX;   
+    public float FollowPlayerXOffset;
+    public float FollowPlayerYOffset;
 
-    //Quaternion TiltedDownRotation = new Quaternion(40, 0 , -20 , 0);
-    public float FollowPlayerXOffset = -12;
-    public float FollowPlayerYOffset = 5;
+    Vector3 TiltedDownRotation;
     Player currentPlayer;
 
+    void Awake()
+    {
+        TiltedDownRotation = new Vector3(TiltedDownRotationX, 90, 0);
+    }
 	
 	// Update is called once per frame
 	void LateUpdate () {
@@ -34,7 +39,7 @@ public class CameraBehaviour : MonoBehaviour {
                     return;
                 }
                 this.transform.position = new Vector3(currentPlayer.transform.position.x + FollowPlayerXOffset, currentPlayer.transform.position.y + FollowPlayerYOffset, currentPlayer.transform.position.z );
-                this.transform.rotation = CameraDefaultPos.rotation;
+                this.transform.rotation = Quaternion.Euler(TiltedDownRotation);
                 //rotation shouldnt change here/ this.transform.rotation = currentPlayer.transform.Find("CameraParkingLot").rotation;
                 // this.transform.LookAt(currentPlayer.transform);
                 break;

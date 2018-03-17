@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     #region Lerp Values
 
     //!!!: these lerp values may not be optimized for user experience but rather for testing
-    //TODO: fix these names
+    //TODO: get these into unity editor
 
     //Good debug values: PLT: 0.2f - WBM: 0.01f - RLT: 0.1f
     //good? user values: PLT: 0.3f - WBM: 0.2f - RLT: 0.2f
@@ -199,8 +199,6 @@ public class Player : MonoBehaviour
             this.transform.rotation = Quaternion.Slerp(startSlerpForMoving, targetTile.transform.rotation, rotPercentage);
 
             //dicecounter has to move with the player
-            //TODO: maybe its better to have a parking lot for the dicecounter inside the player prefab
-            //!!!or maybe they all have their own dicecounter!!!
             DiceCounter.transform.position = this.transform.position + (Vector3.up * 1.5f);
             
             currentLerpTime += Time.deltaTime;
