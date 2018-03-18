@@ -13,7 +13,9 @@ public class TurnManager : MonoBehaviour {
     public static bool TurnInProgress = false;
     public static bool DialogueInProgress;
     public static bool MinigameInProgress = false;
-    
+
+    public static bool AutomaticTestMode = false;
+    public static bool SpeedyTestMode = false;
 
     public static int RollDice()
     {

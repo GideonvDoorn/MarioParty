@@ -15,9 +15,11 @@ public class DialogueManager : MonoBehaviour {
     public Text DialogueText;
     public Player playerinDialogue;
 
+    public float timedDialogue= 2f;
+
     // Use this for initialization
     void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
@@ -42,15 +44,17 @@ public class DialogueManager : MonoBehaviour {
     {
         BranchUI.SetActive(true);
 
-        ////TEST, loop turn without player input
-        //if (UnityEngine.Random.Range(0, 2) == 0)
-        //{
-        //    TriggerYes();
-        //}
-        //else
-        //{
-        //    TriggerNo();
-        //}
+        if (TurnManager.AutomaticTestMode)
+        {
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+                TriggerYes();
+            }
+            else
+            {
+                TriggerNo();
+            }
+        }
     }
 
     public IEnumerator TriggerStarDialogue()
@@ -58,11 +62,11 @@ public class DialogueManager : MonoBehaviour {
         DialoguePanel.SetActive(true);
 
 
-        if(playerinDialogue.playerResources.CoinCount < 20)
+        if (playerinDialogue.playerResources.CoinCount < 20)
         {
             DialogueButtonPanel.SetActive(false);
             DialogueText.text = String.Format("You found a star! You currently have {0} coins, you can't buy it!", playerinDialogue.playerResources.CoinCount);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(timedDialogue);
             DialoguePanel.SetActive(false);
 
             TurnManager.DialogueInProgress = false;
@@ -75,6 +79,10 @@ public class DialogueManager : MonoBehaviour {
 
             ////TEST, loop turn without player input
             //TriggerYes();
+            if (TurnManager.AutomaticTestMode)
+            {
+                TriggerYes();
+            }
         }
     }
 

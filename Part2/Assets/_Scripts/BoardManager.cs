@@ -14,15 +14,11 @@ public class BoardManager : MonoBehaviour
     public GameObject[] resourcePanels;
 
     public DialogueManager dialogueManager;
-    public GameObject DiceCounter;
     public GameObject TurnBanner;
-    public GameObject DiceBlock;
-
-    
+  
     //Containers
     private Player[] players;
     private GameObject loadedBoard;
-    private GameObject spawnedDiceBlock;
     private GameObject Star;
 
     //States
@@ -32,6 +28,11 @@ public class BoardManager : MonoBehaviour
     //Settings
     public float starheight;
     private int numPlayers = 4;
+
+    //Test
+    [Header("Test modes")]
+    public bool AutomaticTestMode;
+    public bool SpeedyTestMode;
 
     //Getter functions
     public List<Tile> getAllTileObjects()
@@ -150,6 +151,12 @@ public class BoardManager : MonoBehaviour
     //Initializing functions
     void Start()
     {
+        //Automatic test mode can be turned on in editor, this will automaticaaly loop player turns
+        TurnManager.AutomaticTestMode = AutomaticTestMode;
+        //Speedy test mode can be turned on in the editor, will loop turns very fast
+        TurnManager.SpeedyTestMode = SpeedyTestMode;
+
+
         LoadBoard();
         if (loadedBoard == null)
         {
@@ -177,6 +184,11 @@ public class BoardManager : MonoBehaviour
         StartCoroutine(StartTurn());
 
     }
+
+
+
+
+
     private void LoadBoard()
     {
         loadedBoard = Instantiate(BoardPrefabs[TurnManager.boardIndex -1], this.transform);
@@ -211,17 +223,16 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void SpawnDiceBlock()
-    {
-        spawnedDiceBlock = Instantiate(DiceBlock, new Vector3(getCurrentPlayer().transform.position.x, getCurrentPlayer().transform.position.y + 1.5f, getCurrentPlayer().transform.position.z), Quaternion.identity, getCurrentPlayer().transform);
-    }
-
     //Turnloop
     IEnumerator StartTurn()
     {
         //TurnLoop part 1: Starts a turn
         //This code will play before a player has inputted anything
         //Right now show the turnbanner
+
+        //Automatic test mode can be turned off at any time, and it will stop here at the start of a turn
+        TurnManager.AutomaticTestMode = AutomaticTestMode;
+
         TurnBanner.SetActive(true);
         TurnBanner.transform.Find("BannerText").GetComponent<Text>().text = "player " + (TurnManager.currentPlayerIndex + 1) + " turn!";
 
@@ -229,18 +240,23 @@ public class BoardManager : MonoBehaviour
         {
             yield return null;
         }
-        SpawnDiceBlock();
+
+        getCurrentPlayer().SetActiveDiceBlock(true);
+
+        if (TurnManager.AutomaticTestMode)
+        {
+            StartPlayerTurn();
+
+        }
         while (TurnManager.TurnInProgress == false)
         {
             yield return null;
         }
 
-
-        ////TEST
-        //StartPlayerTurn();
         yield return new WaitForSeconds(1f);
-        ////TEST
-        //StartPlayerTurn();
+
+
+
     }
 
 
@@ -268,7 +284,7 @@ public class BoardManager : MonoBehaviour
             //turnEnd is a state just to fix a bug between the gap of turninprogress and playerswitching
             //turninprogress doesnt get set to false at the absolute end of a turn but before switching players (and has to keep doing that)
             //Thats why another state was necessary to have an absolute turnend state
-            Destroy(spawnedDiceBlock);
+            
             turnEnd = false;
             startTurnInput = false;
             TurnManager.TurnInProgress = true;
@@ -286,14 +302,15 @@ public class BoardManager : MonoBehaviour
 
             // setactive the DiceCounter, and give it to the player via movethroughtiles, then updates every step and disable again
             //TODO: give it start animation, but that requires optimizing turns first
-            DiceCounter.transform.Find("CounterVisual").GetComponent<TextMeshPro>().text = movement.ToString();
-            DiceCounter.SetActive(true);
+            getCurrentPlayer().SetActiveDiceBlock(false);
+            //DiceCounter.transform.Find("CounterVisual").GetComponent<TextMeshPro>().text = movement.ToString();
+            //DiceCounter.SetActive(true);
 
             Tile currentTile = players[TurnManager.currentPlayerIndex].CurrentTile;
 
 
             //Tell players to move
-            players[TurnManager.currentPlayerIndex].MovePlayerThrougTiles(GeneratePath(currentTile, movement), movement, DiceCounter);
+            players[TurnManager.currentPlayerIndex].MovePlayerThrougTiles(GeneratePath(currentTile, movement), movement);
 
 
 
@@ -325,6 +342,10 @@ public class BoardManager : MonoBehaviour
 
             ////TEST, loop game without user input
             //StartMiniGame();
+            if (TurnManager.AutomaticTestMode)
+            {
+                StartMiniGame();
+            }
         }
         else
         {
@@ -339,7 +360,11 @@ public class BoardManager : MonoBehaviour
 
         ////TEST, loop game without user input
         //StartPlayerTurn();
-        
+        if (TurnManager.AutomaticTestMode)
+        {
+            StartPlayerTurn();
+        }
+
 
     }
     public void StartMiniGame()
@@ -374,6 +399,8 @@ public class BoardManager : MonoBehaviour
     }
 
     //Update Functions
+
+
     public void CalcAndUpdatePlayerRankings()
     {
         //TODO:
@@ -461,9 +488,9 @@ public class BoardManager : MonoBehaviour
         //TODO: animate star to this new tile
         Star.transform.position = newStarTile.transform.position + (Vector3.up * starheight);
 
-        //Debug star vs new tile position
-        Debug.Log("Star: X- " + Star.transform.position.x + "  y- " + Star.transform.position.y + "  z- " + Star.transform.position.z);
-        Debug.Log("New Tile: X- " + newStarTile.transform.position.x + "  y- " + newStarTile.transform.position.y + "  z- " + newStarTile.transform.position.z);
+        ////Debug star vs new tile position
+        //Debug.Log("Star: X- " + Star.transform.position.x + "  y- " + Star.transform.position.y + "  z- " + Star.transform.position.z);
+        //Debug.Log("New Tile: X- " + newStarTile.transform.position.x + "  y- " + newStarTile.transform.position.y + "  z- " + newStarTile.transform.position.z);
 
     }
 }

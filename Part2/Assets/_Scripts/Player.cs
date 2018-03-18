@@ -8,12 +8,14 @@ public class Player : MonoBehaviour
 {
     // In editor assigments/ containers
     public int playerIndex;
-    public PlayerResources playerResources;
+    public DiceBlock DiceBlock;
+    public GameObject MoveCounter;
+    public Transform CameraPosition;
+    [System.NonSerialized] public PlayerResources playerResources;
 
     //Containers
     DialogueManager dialogueManager;
     BoardManager boardManager;
-    GameObject DiceCounter;
 
     [System.NonSerialized] public Tile CurrentTile;
     Tile targetTile;
@@ -23,7 +25,7 @@ public class Player : MonoBehaviour
     int moved = 0;
 
     //States
-    public bool lastInputWasYes = false;
+    [System.NonSerialized] public bool lastInputWasYes = false;
 
     //Settings
     #region Lerp Values
@@ -40,6 +42,8 @@ public class Player : MonoBehaviour
 
     float cameraFaceLerpTime = 0.2f;
     float currentFaceCameraLerp = 0f;
+
+    float waitBetweenTurns = 1f;
 
     Quaternion startSlerpForMoving;
 
@@ -69,6 +73,10 @@ public class Player : MonoBehaviour
     {
         playerResources.Rank = rank;
     }
+    public void SetActiveDiceBlock(bool active)
+    {
+        DiceBlock.gameObject.SetActive(active);
+    }
 
     //Initializing functions
     public void setupPlayer(int index, Tile StartTile, DialogueManager DM, BoardManager BM, GameObject resourcePanel)
@@ -82,39 +90,26 @@ public class Player : MonoBehaviour
         playerResources = GetComponent<PlayerResources>();
 
 
-        //FIXME: could move this bit to boardmanager. Clean it up by handing boardmanager the different player panels, 
-        //and handing them out to this function. Will result in more code but is probably faster
-
         playerResources.ResourcesPanel = resourcePanel;
-        //playerResources.ResourcesPanel = GameObject.Find("Player"+(playerIndex+1)+"ResourcesPanel");
 
+        if (TurnManager.SpeedyTestMode)
+        {
+            dialogueManager.timedDialogue = 0f;
 
-
-        ////Set visuals for players here
-        //Renderer playerMat = transform.Find("PlayerVisual").GetComponent<Renderer>();
-        //switch (index)
-        //{
-        //    case 0:
-        //        playerMat.material.SetColor("_Color", Color.red);
-        //        break;
-        //    case 1:
-        //        playerMat.material.SetColor("_Color", Color.blue);
-        //        break;
-        //    case 2:
-        //        playerMat.material.SetColor("_Color", Color.yellow);
-        //        break;
-        //    case 3:
-        //        playerMat.material.SetColor("_Color", Color.green);
-        //        break;
-        //    default:
-        //        break;
-        //}
+            positionLerpTime = 0f;
+            waitBetweenMoves = 0f;
+            rotationLerpTime = 0f;
+            cameraFaceLerpTime = 0f;
+            waitBetweenTurns = 0f;
+        }
     }
 
     //TurnLoop
-    public void MovePlayerThrougTiles(Tile[] path, int movement, GameObject diceCounter)
+    public void MovePlayerThrougTiles(Tile[] path, int movement)
     {
-        DiceCounter = diceCounter;
+        MoveCounter.SetActive(true);
+        MoveCounter.transform.Find("CounterVisual").GetComponent<TextMeshPro>().text = movement.ToString();
+
         Path = path;
 
         //movement will decide if we will move one more tile
@@ -198,8 +193,6 @@ public class Player : MonoBehaviour
 
             this.transform.rotation = Quaternion.Slerp(startSlerpForMoving, targetTile.transform.rotation, rotPercentage);
 
-            //dicecounter has to move with the player
-            DiceCounter.transform.position = this.transform.position + (Vector3.up * 1.5f);
             
             currentLerpTime += Time.deltaTime;
             yield return null;
@@ -207,7 +200,7 @@ public class Player : MonoBehaviour
         //The lerp doesnt actually take the player all the way to targetPosition. 
         //So to avoid this error, I set it here at the end, and it still looks smooth.
         this.transform.position = targetPosition;
-        DiceCounter.transform.position = this.transform.position + (Vector3.up * 1.5f);
+        ////DiceCounter.transform.position = this.transform.position + (Vector3.up * 1.5f);
 
 
 
@@ -221,8 +214,8 @@ public class Player : MonoBehaviour
         moved++;
         CurrentTile = targetTile;
 
-        //update dicecounter
-        DiceCounter.transform.Find("CounterVisual").GetComponent<TextMeshPro>().text = movement.ToString();
+        //update moveCounter
+        MoveCounter.transform.Find("CounterVisual").GetComponent<TextMeshPro>().text = movement.ToString();
 
         #endregion
 
@@ -235,7 +228,7 @@ public class Player : MonoBehaviour
         if (CurrentTile.tileType == TileType.StarTile)
         {
             //disable dicecounter, else its in the way of the star and looks ugly
-            DiceCounter.SetActive(false);
+            MoveCounter.SetActive(false);
 
 
             //triggers dialogue and waits for user input, after that player can move again
@@ -254,8 +247,8 @@ public class Player : MonoBehaviour
             moved = 0;
             Path = boardManager.GeneratePath(CurrentTile, movement);
 
-            //enable dicecounter again
-            DiceCounter.SetActive(true);
+            //enable moveCounter again
+            MoveCounter.SetActive(true);
         }
         //We check here if a tile is a branch tile
         //And we offer the player a choice and change (or dont change) the path of the player
@@ -303,7 +296,7 @@ public class Player : MonoBehaviour
             endRotation = Quaternion.AngleAxis(-90, transform.up);
             StartCoroutine( CRLerpPlayerToFaceCamera());
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(waitBetweenTurns);
             //We finished moving
             StartTurnEnd();
             //We finished our turn
@@ -336,7 +329,7 @@ public class Player : MonoBehaviour
     void StartTurnEnd()
     {
         //disable dicecounter
-        DiceCounter.SetActive(false);
+        MoveCounter.SetActive(false);
 
 
 
@@ -364,4 +357,11 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
+    //Update functions
+    void LateUpdate()
+    {
+        MoveCounter.transform.rotation = Quaternion.identity;
+    }
+
 }

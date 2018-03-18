@@ -9,9 +9,9 @@ public class PlayerResources : MonoBehaviour {
 
     private int rank = 4;
     private int starCount = 0;
-    private int coinCount = 200;
+    private int coinCount = 20;
 
-    public GameObject ResourcesPanel; 
+    [System.NonSerialized] public GameObject ResourcesPanel; 
 
     public int StarCount
     {
