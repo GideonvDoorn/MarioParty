@@ -340,8 +340,6 @@ public class BoardManager : MonoBehaviour
             CameraBehaviour.cameraMode = CameraMode.MapViewMode;
             TurnManager.MinigameInProgress = true;
 
-            ////TEST, loop game without user input
-            //StartMiniGame();
             if (TurnManager.AutomaticTestMode)
             {
                 StartMiniGame();

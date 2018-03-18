@@ -8,6 +8,8 @@ public class Tile: MonoBehaviour{
     public int branchIndex = -1;
     public TileType tileType;
 
+    public IEvent TileEvt;
+
     private BoardData boardData;
 
     public int getNextTileIndex()
@@ -45,6 +47,10 @@ public class Tile: MonoBehaviour{
             case TileType.BranchTile:
                 this.tileType = tile;
                 tileMat.material = boardData.BranchTileMaterial;
+                break;
+            case TileType.EventTile:
+                this.tileType = tile;
+                tileMat.material = boardData.EventTileMaterial;
                 break;
             default:
                 break;

@@ -21,8 +21,8 @@ public class Player : MonoBehaviour
     Tile targetTile;
     Tile[] Path;
 
-    int movement;
-    int moved = 0;
+    [System.NonSerialized] public int movement;
+    [System.NonSerialized] public int moved = 0;
 
     //States
     [System.NonSerialized] public bool lastInputWasYes = false;
@@ -53,7 +53,8 @@ public class Player : MonoBehaviour
 
     Vector3 startPosition;
     Vector3 targetPosition;
-    
+    private bool endTurn;
+
     #endregion
 
     //Getter/Setter functions
@@ -168,6 +169,7 @@ public class Player : MonoBehaviour
         //Start the CR
         StartCoroutine(CRAnimatePlayer());
     }
+
     IEnumerator CRAnimatePlayer()
     { 
 
@@ -274,6 +276,7 @@ public class Player : MonoBehaviour
             }
         }
 
+
         #endregion
 
 
@@ -296,9 +299,22 @@ public class Player : MonoBehaviour
             endRotation = Quaternion.AngleAxis(-90, transform.up);
             StartCoroutine( CRLerpPlayerToFaceCamera());
 
-            yield return new WaitForSeconds(waitBetweenTurns);
             //We finished moving
+            Debug.Log("start turn end");
             StartTurnEnd();
+
+            while (!endTurn)
+            {
+                yield return null;
+                Debug.Log("waiting for event");
+
+            }
+
+            Debug.Log("waiting between moves");
+            yield return new WaitForSeconds(waitBetweenTurns);
+            Debug.Log("waiting finished - turn in progress false");
+
+
             //We finished our turn
 
             TurnManager.TurnInProgress = false;
@@ -336,8 +352,6 @@ public class Player : MonoBehaviour
         //Check if final tile is blue/begin, red or star
         //if blue give player 3 coins, if red subtract 3 coins
 
-
-
         switch (CurrentTile.tileType)
         {
             case TileType.BeginTile:
@@ -352,10 +366,15 @@ public class Player : MonoBehaviour
             case TileType.StarTile:
                 //nothing happens when you end a turn on a star, since the star prompt already happened
                 break;
+            case TileType.EventTile:
+                //Play an event
+                CurrentTile.TileEvt.runEvent(this);
+                break;
             default:
                 //By default nothing special happens
                 break;
         }
+        endTurn = true;
     }
 
     //Update functions
