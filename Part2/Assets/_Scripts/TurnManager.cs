@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour {
 
     public static int currentPlayerIndex = 0;
     public static int boardIndex = 3;
-    public static int turnAmount = 20;
+    public static int turnAmount = 100;
     public static int currentTurn = 0;
     public static bool TurnInProgress = false;
     public static bool DialogueInProgress;

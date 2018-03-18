@@ -5,10 +5,12 @@ using UnityEngine;
 public class InputScript : MonoBehaviour
 {
     BoardManager BM;
+    UIManager UIM;
 
     void Awake()
     {
         BM = GetComponent<BoardManager>();
+        UIM = BM.UIM;
     }
 
     void Update()
@@ -25,11 +27,11 @@ public class InputScript : MonoBehaviour
         {
             if (TurnManager.gamePaused)
             {
-                BM.UnPauseGame();
+                UIM.UnPauseGame();
             }
             else
             {
-                BM.PauseGame();
+                UIM.PauseGame();
             }
 
         }

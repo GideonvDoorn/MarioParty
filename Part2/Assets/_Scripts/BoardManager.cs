@@ -15,8 +15,7 @@ public class BoardManager : MonoBehaviour
 
     public DialogueManager dialogueManager;
     public GameObject TurnBanner;
-    public GameObject MainMenuPanel;
-    public GameObject ButtonRollDice;
+    public UIManager UIM;
 
     //Containers
     private Player[] players;
@@ -392,6 +391,16 @@ public class BoardManager : MonoBehaviour
             Debug.Log("Minigame ended");
             CameraBehaviour.cameraMode = CameraMode.FollowPlayer;
 
+            //Increment turn counter
+
+            if (TurnManager.currentTurn == TurnManager.turnAmount)
+            {
+                UIM.QuitToMainMenu();
+                TurnManager.currentTurn = 0;
+            }
+            TurnManager.currentTurn++;
+            UIM.updateTurnCounter();
+
             //Start turn for player 1
             StartCoroutine(StartTurn());
 
@@ -495,19 +504,5 @@ public class BoardManager : MonoBehaviour
     }
 
     //Other functions
-    public void PauseGame()
-    {
-        ButtonRollDice.SetActive(false);
-        TurnManager.gamePaused = true;
-        MainMenuPanel.SetActive(true);
-        Time.timeScale = 0;
-    }
 
-    public void UnPauseGame()
-    {
-        ButtonRollDice.SetActive(true);
-        TurnManager.gamePaused = false;
-        MainMenuPanel.SetActive(false);
-        Time.timeScale = 1;
-    }
 }
