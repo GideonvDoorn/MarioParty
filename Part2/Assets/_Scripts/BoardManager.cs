@@ -15,7 +15,9 @@ public class BoardManager : MonoBehaviour
 
     public DialogueManager dialogueManager;
     public GameObject TurnBanner;
-  
+    public GameObject MainMenuPanel;
+    public GameObject ButtonRollDice;
+
     //Containers
     private Player[] players;
     private GameObject loadedBoard;
@@ -490,5 +492,22 @@ public class BoardManager : MonoBehaviour
         //Debug.Log("Star: X- " + Star.transform.position.x + "  y- " + Star.transform.position.y + "  z- " + Star.transform.position.z);
         //Debug.Log("New Tile: X- " + newStarTile.transform.position.x + "  y- " + newStarTile.transform.position.y + "  z- " + newStarTile.transform.position.z);
 
+    }
+
+    //Other functions
+    public void PauseGame()
+    {
+        ButtonRollDice.SetActive(false);
+        TurnManager.gamePaused = true;
+        MainMenuPanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void UnPauseGame()
+    {
+        ButtonRollDice.SetActive(true);
+        TurnManager.gamePaused = false;
+        MainMenuPanel.SetActive(false);
+        Time.timeScale = 1;
     }
 }

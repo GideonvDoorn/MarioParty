@@ -4,12 +4,35 @@ using UnityEngine;
 
 public class InputScript : MonoBehaviour
 {
+    BoardManager BM;
+
+    void Awake()
+    {
+        BM = GetComponent<BoardManager>();
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            GetComponent<BoardManager>().StartPlayerTurn();
+            if (!TurnManager.gamePaused)
+            {
+                BM.StartPlayerTurn();
+
+            }
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (TurnManager.gamePaused)
+            {
+                BM.UnPauseGame();
+            }
+            else
+            {
+                BM.PauseGame();
+            }
+
+        }
+
     }
 }

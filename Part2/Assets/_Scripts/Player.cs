@@ -300,19 +300,15 @@ public class Player : MonoBehaviour
             StartCoroutine( CRLerpPlayerToFaceCamera());
 
             //We finished moving
-            Debug.Log("start turn end");
             StartTurnEnd();
 
             while (!endTurn)
             {
                 yield return null;
-                Debug.Log("waiting for event");
 
             }
 
-            Debug.Log("waiting between moves");
             yield return new WaitForSeconds(waitBetweenTurns);
-            Debug.Log("waiting finished - turn in progress false");
 
 
             //We finished our turn
