@@ -235,7 +235,7 @@ public class Player : MonoBehaviour
 
             //triggers dialogue and waits for user input, after that player can move again
             TurnManager.DialogueInProgress = true;
-            dialogueManager.TriggerDialogue("Star", this);
+            dialogueManager.TriggerDialogue("Star", this, CurrentTile);
             yield return StartCoroutine(WaitForUserInput());
 
             //if player answered yes, star is bought and star is relocated.
@@ -260,19 +260,19 @@ public class Player : MonoBehaviour
 
             //Triggers dialogue and wait for user input, after that player will move again
             TurnManager.DialogueInProgress = true;
-            dialogueManager.TriggerDialogue("Branch", this);
+            dialogueManager.TriggerDialogue("Branch", this, CurrentTile);
             yield return StartCoroutine(WaitForUserInput());
 
-            //Yes represents right, and no represents left, more or less just a true/false
+            //Yes represents branch, and no represents dont branch, more or less just a true/false
             if (lastInputWasYes)
             {
-                //Move Right, or more specific dynamicaly change the path to move right
-                Path = boardManager.GeneratePath(CurrentTile, movement);
+                //Move down the branch by generating new path
+                Path = boardManager.GeneratePath(CurrentTile, movement, true);
             }
             else
             {
-                //Move Left, or more specific dynamicaly change the path to move left
-                Path = boardManager.GeneratePath(CurrentTile, movement, true);
+                //Dont move down the branch by generating new path
+                Path = boardManager.GeneratePath(CurrentTile, movement);
             }
         }
 
@@ -302,12 +302,12 @@ public class Player : MonoBehaviour
             //We finished moving
             StartTurnEnd();
 
-            while (!endTurn)
-            {
-                yield return null;
+            //while (!TurnManager.eventFinished)
+            //{
+            //    yield return null;
 
-            }
-
+            //}
+            //TurnManager.eventFinished = false;
             yield return new WaitForSeconds(waitBetweenTurns);
 
 
@@ -352,25 +352,30 @@ public class Player : MonoBehaviour
         {
             case TileType.BeginTile:
                 //Nothing happens on begintile
+                TurnManager.eventFinished = true;
                 break;
             case TileType.BlueTile:
                 playerResources.CoinCount += 3;
+                TurnManager.eventFinished = true;
                 break;
             case TileType.RedTile:
                 playerResources.CoinCount -= 3;
+                TurnManager.eventFinished = true;
                 break;
             case TileType.StarTile:
                 //nothing happens when you end a turn on a star, since the star prompt already happened
+                TurnManager.eventFinished = true;
                 break;
             case TileType.EventTile:
                 //Play an event
                 CurrentTile.TileEvt.runEvent(this);
                 break;
             default:
+                TurnManager.eventFinished = true;
                 //By default nothing special happens
                 break;
         }
-        endTurn = true;
+        
     }
 
     //Update functions

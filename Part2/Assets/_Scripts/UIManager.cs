@@ -67,4 +67,9 @@ public class UIManager : MonoBehaviour {
     {
         SceneManager.LoadScene(0);
     }
+
+    public void ToResultsScreen()
+    {
+        SceneManager.LoadScene(2);
+    }
 }

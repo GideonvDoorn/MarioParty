@@ -32,7 +32,7 @@ public class MainMenuHandler : MonoBehaviour {
         }
 
         TurnManager.turnAmount = Convert.ToInt32(turns.text);
-        TurnManager.currentTurn = 0;
+        TurnManager.currentTurn = 1;
         SceneManager.LoadScene(1);
     }
 

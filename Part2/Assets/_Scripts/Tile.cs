@@ -7,6 +7,9 @@ public class Tile: MonoBehaviour{
     public int tileIndex;
     public int branchIndex = -1;
     public TileType tileType;
+    public string BranchButtonText;
+    public string DontBranchButtonText;
+
 
     public IEvent TileEvt;
 

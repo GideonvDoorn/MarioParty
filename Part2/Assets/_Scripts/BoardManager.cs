@@ -389,15 +389,16 @@ public class BoardManager : MonoBehaviour
 
             TurnManager.MinigameInProgress = false;
             Debug.Log("Minigame ended");
-            CameraBehaviour.cameraMode = CameraMode.FollowPlayer;
+
 
             //Increment turn counter
 
             if (TurnManager.currentTurn == TurnManager.turnAmount)
             {
-                UIM.QuitToMainMenu();
+                UIM.ToResultsScreen();
                 TurnManager.currentTurn = 0;
             }
+            CameraBehaviour.cameraMode = CameraMode.FollowPlayer;
             TurnManager.currentTurn++;
             UIM.updateTurnCounter();
 

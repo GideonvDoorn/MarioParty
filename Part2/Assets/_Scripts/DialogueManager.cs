@@ -27,7 +27,9 @@ public class DialogueManager : MonoBehaviour {
 		
 	}
 
-    public void TriggerDialogue(string dialogue, Player player)
+
+    //TODO: get rid of this
+    public void TriggerDialogue(string dialogue, Player player, Tile tile)
     {
         playerinDialogue = player;
         if (dialogue == "Star")
@@ -36,12 +38,14 @@ public class DialogueManager : MonoBehaviour {
         }
         else if(dialogue == "Branch")
         {
-            TriggerBranchDialogue();
+            TriggerBranchDialogue(tile);
         }
     }
 
-    private void TriggerBranchDialogue()
+    private void TriggerBranchDialogue(Tile tile)
     {
+        BranchUI.transform.Find("BranchButton").Find("Text").GetComponent<Text>().text = tile.BranchButtonText ;
+        BranchUI.transform.Find("DontBranchButton").Find("Text").GetComponent<Text>().text = tile.DontBranchButtonText;
         BranchUI.SetActive(true);
 
         if (TurnManager.AutomaticTestMode)
@@ -100,6 +104,7 @@ public class DialogueManager : MonoBehaviour {
     {
         TurnManager.DialogueInProgress = false;
         DialoguePanel.SetActive(false);
+        
         BranchUI.SetActive(false);
         playerinDialogue.lastInputWasYes = false;
     }
