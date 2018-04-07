@@ -9,10 +9,11 @@ public class DialogueManager : MonoBehaviour {
 
     public GameObject DialoguePanel;
     public GameObject DialogueButtonPanel;
+    public Text DialogueText;
 
     public GameObject BranchUI;
 
-    public Text DialogueText;
+
     public Player playerinDialogue;
 
     public float timedDialogue= 2f;
@@ -29,26 +30,32 @@ public class DialogueManager : MonoBehaviour {
 
 
     //TODO: get rid of this
-    public void TriggerDialogue(string dialogue, Player player, Tile tile)
+    public void TriggerDialogue(Player player, Tile tile, bool AI)
     {
         playerinDialogue = player;
-        if (dialogue == "Star")
+        if (tile.tileType == TileType.StarTile)
         {
-            StartCoroutine(TriggerStarDialogue());
+            StartCoroutine(TriggerStarDialogue(player.getCoins(), AI));
         }
-        else if(dialogue == "Branch")
+        else if(tile.tileType == TileType.BranchTile)
         {
-            TriggerBranchDialogue(tile);
+            TriggerBranchDialogue(tile, AI);
         }
+        else if(tile.tileType == TileType.ShopTile)
+        {
+            StartCoroutine(TriggerShopDialogue(player.getCoins(), AI));
+        }
+
     }
 
-    private void TriggerBranchDialogue(Tile tile)
+    private void TriggerBranchDialogue(Tile tile, bool AI)
     {
+        TurnManager.BranchDialogueInProgress = true;
         BranchUI.transform.Find("BranchButton").Find("Text").GetComponent<Text>().text = tile.BranchButtonText ;
         BranchUI.transform.Find("DontBranchButton").Find("Text").GetComponent<Text>().text = tile.DontBranchButtonText;
         BranchUI.SetActive(true);
 
-        if (TurnManager.AutomaticTestMode)
+        if (TurnManager.AutomaticTestMode || AI)
         {
             if (UnityEngine.Random.Range(0, 2) == 0)
             {
@@ -61,15 +68,14 @@ public class DialogueManager : MonoBehaviour {
         }
     }
 
-    public IEnumerator TriggerStarDialogue()
+    public IEnumerator TriggerShopDialogue(int playerCoins, bool AI)
     {
         DialoguePanel.SetActive(true);
 
-
-        if (playerinDialogue.playerResources.CoinCount < 20)
+        if (playerCoins <5)
         {
             DialogueButtonPanel.SetActive(false);
-            DialogueText.text = String.Format("You found a star! You currently have {0} coins, you can't buy it!", playerinDialogue.playerResources.CoinCount);
+            DialogueText.text = String.Format("Want to buy a crystal? You currently have {0} coins, you can't buy it!", playerCoins);
             yield return new WaitForSeconds(timedDialogue);
             DialoguePanel.SetActive(false);
 
@@ -79,11 +85,43 @@ public class DialogueManager : MonoBehaviour {
         else
         {
             DialogueButtonPanel.SetActive(true);
-            DialogueText.text = String.Format("You found a star! You currently have {0} coins, want to buy it?", playerinDialogue.playerResources.CoinCount);
+            DialogueText.text = String.Format("Want to buy a crystal? It costs 5 coins! You currently have {0} coins!", playerCoins);
 
             ////TEST, loop turn without player input
             //TriggerYes();
-            if (TurnManager.AutomaticTestMode)
+            if (TurnManager.AutomaticTestMode || AI)
+            {
+                TriggerYes();
+            }
+        }
+
+
+    }
+
+
+    public IEnumerator TriggerStarDialogue(int playerCoins, bool AI)
+    {
+        DialoguePanel.SetActive(true);
+
+
+        if (playerCoins < 20)
+        {
+            DialogueButtonPanel.SetActive(false);
+            DialogueText.text = String.Format("You found a star! It costs 20 coins! You currently have {0} coins, you can't buy it!", playerCoins);
+            yield return new WaitForSeconds(timedDialogue);
+            DialoguePanel.SetActive(false);
+
+            TurnManager.DialogueInProgress = false;
+            playerinDialogue.lastInputWasYes = false;
+        }
+        else
+        {
+            DialogueButtonPanel.SetActive(true);
+            DialogueText.text = String.Format("You found a star! Want to buy it for  20 coins? You currently have {0} coins!", playerCoins);
+
+            ////TEST, loop turn without player input
+            //TriggerYes();
+            if (TurnManager.AutomaticTestMode || AI)
             {
                 TriggerYes();
             }
@@ -95,6 +133,8 @@ public class DialogueManager : MonoBehaviour {
     public void TriggerYes()
     {
         TurnManager.DialogueInProgress = false;
+        TurnManager.BranchDialogueInProgress = false;
+
         DialoguePanel.SetActive(false);
         BranchUI.SetActive(false);
         playerinDialogue.lastInputWasYes = true;
@@ -103,6 +143,7 @@ public class DialogueManager : MonoBehaviour {
     public void TriggerNo()
     {
         TurnManager.DialogueInProgress = false;
+        TurnManager.BranchDialogueInProgress = false;
         DialoguePanel.SetActive(false);
         
         BranchUI.SetActive(false);

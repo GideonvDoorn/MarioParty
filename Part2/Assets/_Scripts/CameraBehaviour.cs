@@ -11,6 +11,7 @@ public class CameraBehaviour : MonoBehaviour {
 
     public BoardManager BM;
     public Transform CameraDefaultPos;
+    public Transform MapViewModePos;
     public float TiltedDownRotationX;   
     public float FollowPlayerXOffset;
     public float FollowPlayerYOffset;
@@ -50,9 +51,36 @@ public class CameraBehaviour : MonoBehaviour {
             case CameraMode.FollowStar:
                 break;
             case CameraMode.ExploreMap:
+               
                 break;
             default:
                 break;
         }
 	}
+
+    public void SetExploreMapMode()
+    {
+        cameraMode = CameraMode.ExploreMap;
+        this.transform.position = MapViewModePos.position;
+        this.transform.rotation = Quaternion.Euler(new Vector3(90, 90, 0));
+    }
+
+
+    public void scrollCamera(bool horizontal)
+    {
+        float translation = 0;
+        if (horizontal)
+        {
+            translation = Input.GetAxis("Horizontal") * 30;
+            translation *= Time.deltaTime;
+            transform.Translate(translation,0 , 0);
+        }
+        else
+        {
+            translation = Input.GetAxis("Vertical") * 30;
+            translation *= Time.deltaTime;
+            transform.Translate(0, translation, 0);
+        }
+
+    }
 }

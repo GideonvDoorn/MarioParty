@@ -10,44 +10,115 @@ public class MainMenuHandler : MonoBehaviour {
     public InputField turns;
     public InputField board;
 
-    public GameObject[] panels;
-    int selectedIndex = 0;
+    public GameObject[] BoardPanels;
+    public GameObject[] TurnButtons;
+    public GameObject[] PlayerButtons;
+    public GameObject[] DifficultyButtons;
+
+    int selectedBoardIndex = 0;
+    int selectedTurnsIndex = 0;
+    int selectedPlayersIndex = 0;
+    int selectedDifficultyIndex = 0;
+
+    void Start()
+    {
+        SelectBoard(0);
+        SelectTurnAmount(0);
+        SelectPlayerAmount(0);
+        SelectDifficulty(0);
+    }
 
     public void StartGame()
     {
-        if(selectedIndex == 0)
+        if(selectedBoardIndex == 0)
         {
             Debug.Log("No board selected");
             return;
         }
 
-        TurnManager.boardIndex = selectedIndex;
+        TurnManager.boardIndex = selectedBoardIndex;
 
-
-        if (Convert.ToInt32(turns.text) < 1)
+        switch (selectedTurnsIndex)
         {
-                    
-            Debug.Log("Select a valid turn limit");
-            return;
+            case 1:
+                TurnManager.turnAmount = 20;
+                break;
+            case 2:
+                TurnManager.turnAmount = 30;
+                break;
+            case 3:
+                TurnManager.turnAmount = 40;
+                break;
+            default:
+                break;
         }
 
-        TurnManager.turnAmount = Convert.ToInt32(turns.text);
-        TurnManager.currentTurn = 1;
+        TurnManager.playerAmount = selectedPlayersIndex;
+
+        TurnManager.hardDifficulty = false;
+        if(selectedDifficultyIndex == 1)
+        {
+            TurnManager.hardDifficulty = true;
+        }
+
+      
         SceneManager.LoadScene(1);
     }
 
     public void SelectBoard(int index)
     {
-        selectedIndex = index +1;
+        selectedBoardIndex = index +1;
         Color color = new Color();
-        ColorUtility.TryParseHtmlString("#D27C7CFF", out color);
-        foreach (GameObject go in panels)
+        ColorUtility.TryParseHtmlString("#636363FF", out color);
+        foreach (GameObject go in BoardPanels)
         {
             go.GetComponent<Image>().color = color;
 
         }
-        ColorUtility.TryParseHtmlString("#636363FF", out color);
-        panels[index].GetComponent<Image>().color = color;
+        ColorUtility.TryParseHtmlString("#F68F8FFF", out color);
+        BoardPanels[index].GetComponent<Image>().color = color;
 
+    }
+
+    public void SelectPlayerAmount(int index)
+    {
+        selectedPlayersIndex = index + 1;
+        Color color = new Color();
+        ColorUtility.TryParseHtmlString("#636363FF", out color);
+        foreach (GameObject go in PlayerButtons)
+        {
+            go.GetComponent<Image>().color = color;
+
+        }
+        ColorUtility.TryParseHtmlString("#F68F8FFF", out color);
+        PlayerButtons[index].GetComponent<Image>().color = color;
+    }
+
+    public void SelectTurnAmount(int index)
+    {
+        selectedTurnsIndex = index + 1;
+        Color color = new Color();
+        ColorUtility.TryParseHtmlString("#636363FF", out color);
+        foreach (GameObject go in TurnButtons)
+        {
+            go.GetComponent<Image>().color = color;
+
+        }
+        ColorUtility.TryParseHtmlString("#F68F8FFF", out color);
+        TurnButtons[index].GetComponent<Image>().color = color;
+    }
+
+    public void SelectDifficulty(int index)
+    {
+        selectedDifficultyIndex = index + 1;
+        Color color = new Color();
+        ColorUtility.TryParseHtmlString("#636363FF", out color);
+        foreach (GameObject go in DifficultyButtons)
+        {
+            go.GetComponent<Image>().color = color;
+
+        }
+        ColorUtility.TryParseHtmlString("#F68F8FFF", out color);
+        DifficultyButtons[index].GetComponent<Image>().color = color;
     }
 }

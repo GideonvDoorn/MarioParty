@@ -9,13 +9,17 @@ using UnityEngine.UI;
 public class BoardManager : MonoBehaviour
 {
     //In editor assigments/ containers
+    [Header("General")]
     public GameObject[] BoardPrefabs;
     public GameObject[] PlayerPrefabs;
     public GameObject[] resourcePanels;
 
+    [Header("UI")]
     public DialogueManager dialogueManager;
     public GameObject TurnBanner;
+    public GameObject DiceRollMenu;
     public UIManager UIM;
+    public Text DiceRollHeightText;
 
     //Containers
     private Player[] players;
@@ -45,6 +49,7 @@ public class BoardManager : MonoBehaviour
         }
         return AllTileObjects;
     }
+
     public Tile getTileByIndex(int index)
     {
         Tile Tile = null;
@@ -215,12 +220,35 @@ public class BoardManager : MonoBehaviour
             Debug.LogError("No tile of TileType: BeginTile found, can't spawn players!");
             return;
         }
-
         for (int i = 0; i < 4; i++)
         {
             players[i] = Instantiate(PlayerPrefabs[i], begintile.transform.Find("PlayerPlaceMarkers").Find("Player" + (i + 1) + "PlaceMarker").position, begintile.transform.rotation).GetComponent<Player>();
             players[i].setupPlayer(i, begintile.GetComponent<Tile>(), dialogueManager, this, resourcePanels[i]);
             players[i].playerResources.UpdateUI();
+        }
+
+        SetAIControlled();
+    }
+
+    public void SetAIControlled()
+    {
+        //Automatic test mode can be turned off at any time, and it will stop here at the start of a turn
+        if (!TurnManager.AutomaticTestMode)
+        {
+
+            for (int i = 0; i < 4; i++)
+            {
+                if(i < TurnManager.playerAmount)
+                {
+                    players[i].AIControlled = false;
+                }
+                else
+                {
+                    players[i].AIControlled = true;
+                }
+
+
+            }
         }
     }
 
@@ -231,8 +259,7 @@ public class BoardManager : MonoBehaviour
         //This code will play before a player has inputted anything
         //Right now show the turnbanner
 
-        //Automatic test mode can be turned off at any time, and it will stop here at the start of a turn
-        TurnManager.AutomaticTestMode = AutomaticTestMode;
+
 
         TurnBanner.SetActive(true);
         TurnBanner.transform.Find("BannerText").GetComponent<Text>().text = "player " + (TurnManager.currentPlayerIndex + 1) + " turn!";
@@ -244,7 +271,7 @@ public class BoardManager : MonoBehaviour
 
         getCurrentPlayer().SetActiveDiceBlock(true);
 
-        if (TurnManager.AutomaticTestMode)
+        if (TurnManager.AutomaticTestMode || getCurrentPlayer().AIControlled)
         {
             StartPlayerTurn();
 
@@ -260,20 +287,59 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    public void ExploreMapMode()
+    {
+        //if this is the second turn input
+        if (((startTurnInput == true && TurnManager.TurnInProgress == false & turnEnd == true && TurnManager.MinigameInProgress == false)) || TurnManager.BranchDialogueInProgress)
+        {
+            if(CameraBehaviour.cameraMode == CameraMode.ExploreMap)
+            {
+                CameraBehaviour.cameraMode = CameraMode.FollowPlayer;
+            }
+            else
+            {
+                Camera.main.GetComponent<CameraBehaviour>().SetExploreMapMode();
+            }
 
+        }
+    }
+
+
+    public void BuyCrystal()
+    {
+        if (startTurnInput == true && TurnManager.TurnInProgress == false & turnEnd == true && TurnManager.MinigameInProgress == false)
+        {
+            if (CameraBehaviour.cameraMode != CameraMode.ExploreMap)
+            {
+                getCurrentPlayer().SpendCrystal();
+                DiceRollHeightText.text = "Roll Height: " + (TurnManager.DiceRollHeight -1);
+            }
+
+
+        }
+    }
 
     public void StartPlayerTurn()
     {
+
+        //if this is the first turn input, show the dice
         if(startTurnInput == false && TurnManager.TurnInProgress == false && TurnManager.MinigameInProgress == false)
         {
+
+            //reset dice roll heigth
+            TurnManager.DiceRollHeight = 11;
+            DiceRollHeightText.text = "Roll Height: " + (TurnManager.DiceRollHeight - 1);
+
             startTurnInput = true;
             TurnBanner.SetActive(false);
-
+            DiceRollMenu.SetActive(true);
 
             return;
         }
 
-        if (startTurnInput == true && TurnManager.TurnInProgress == false & turnEnd == true && TurnManager.MinigameInProgress == false)
+        //if this is the second turn input, roll the dice
+
+        if (startTurnInput == true && TurnManager.TurnInProgress == false && TurnManager.MinigameInProgress == false)
         {
             //TurnLoop part 2: Roll die and move player
             //The player has showed us that he wants to roll his die.
@@ -282,11 +348,7 @@ public class BoardManager : MonoBehaviour
             //Which (BoardManager.EndTurn) will be the next part of the turn loop
 
 
-            //turnEnd is a state just to fix a bug between the gap of turninprogress and playerswitching
-            //turninprogress doesnt get set to false at the absolute end of a turn but before switching players (and has to keep doing that)
-            //Thats why another state was necessary to have an absolute turnend state
-            
-            turnEnd = false;
+            DiceRollMenu.SetActive(false);
             startTurnInput = false;
             TurnManager.TurnInProgress = true;
 
@@ -327,14 +389,14 @@ public class BoardManager : MonoBehaviour
         //if that is the case, the turnLoop will loop back to part 1. (BoardManager.StartTurn)
         //If all players had there turn, this will lead to the final part of the turnloop (BoardManager.StartMiniGame)
         //which will in turn also lead back to part 1. (BoardManager.StartTurn)
+
+        CalcAndUpdatePlayerRankings();
+
         while (TurnManager.TurnInProgress == true)
         {
             yield return null;
         }
         
-        //reset current player index, when every player had it's turn, else starts a new turn for the next player
-        //BUG! Sometimes a player can move twice by hammering the roll turn button
-        //Fixed with turnEnd state
         if (TurnManager.currentPlayerIndex == 3)
         {
             TurnManager.currentPlayerIndex = 0;
@@ -353,18 +415,15 @@ public class BoardManager : MonoBehaviour
         }
 
 
-        CalcAndUpdatePlayerRankings();
-        turnEnd = true;
+
         startTurnInput = false;
 
         ////TEST, loop game without user input
         //StartPlayerTurn();
-        if (TurnManager.AutomaticTestMode)
+        if (TurnManager.AutomaticTestMode || getCurrentPlayer().AIControlled)
         {
             StartPlayerTurn();
         }
-
-
     }
     public void StartMiniGame()
     {
@@ -409,8 +468,6 @@ public class BoardManager : MonoBehaviour
     }
 
     //Update Functions
-
-
     public void CalcAndUpdatePlayerRankings()
     {
         //TODO:
@@ -503,7 +560,5 @@ public class BoardManager : MonoBehaviour
         //Debug.Log("New Tile: X- " + newStarTile.transform.position.x + "  y- " + newStarTile.transform.position.y + "  z- " + newStarTile.transform.position.z);
 
     }
-
-    //Other functions
 
 }

@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     public Transform CameraPosition;
     [System.NonSerialized] public PlayerResources playerResources;
 
+    public bool AIControlled = false;
+
     //Containers
     DialogueManager dialogueManager;
     BoardManager boardManager;
@@ -77,6 +79,15 @@ public class Player : MonoBehaviour
     public void SetActiveDiceBlock(bool active)
     {
         DiceBlock.gameObject.SetActive(active);
+    }
+
+    public void SpendCrystal()
+    {
+        if(getCoins() >= 5)
+        {
+            playerResources.SpendCrystal();
+            Debug.Log("Player.spendCrystal");
+        }
     }
 
     //Initializing functions
@@ -202,6 +213,7 @@ public class Player : MonoBehaviour
         //The lerp doesnt actually take the player all the way to targetPosition. 
         //So to avoid this error, I set it here at the end, and it still looks smooth.
         this.transform.position = targetPosition;
+
         ////DiceCounter.transform.position = this.transform.position + (Vector3.up * 1.5f);
 
 
@@ -209,7 +221,7 @@ public class Player : MonoBehaviour
         //We finished the move, now we have less movement but we moved more. Also our currenttile is now the targettile we moved to.
 
         //Branch tile and star tiles ignores 1 movement, so if targetile is a branchtile dont lower movement
-        if(targetTile.tileType != TileType.BranchTile && targetTile.tileType != TileType.StarTile)
+        if(targetTile.tileType != TileType.BranchTile && targetTile.tileType != TileType.StarTile && targetTile.tileType != TileType.ShopTile)
         {
             movement--;
         }
@@ -229,13 +241,13 @@ public class Player : MonoBehaviour
         //that will automatically bail out.
         if (CurrentTile.tileType == TileType.StarTile)
         {
-            //disable dicecounter, else its in the way of the star and looks ugly
+            //disable dicecounter, else its in the way of the star
             MoveCounter.SetActive(false);
 
 
             //triggers dialogue and waits for user input, after that player can move again
             TurnManager.DialogueInProgress = true;
-            dialogueManager.TriggerDialogue("Star", this, CurrentTile);
+            dialogueManager.TriggerDialogue(this, CurrentTile, AIControlled);
             yield return StartCoroutine(WaitForUserInput());
 
             //if player answered yes, star is bought and star is relocated.
@@ -252,6 +264,32 @@ public class Player : MonoBehaviour
             //enable moveCounter again
             MoveCounter.SetActive(true);
         }
+        //Check if there is a shop tile
+        //Player is promtped to buy a crystal for 5 coins
+        else if (CurrentTile.tileType == TileType.ShopTile)
+        {
+            //disable dicecounter, else its in the way of the shop
+            MoveCounter.SetActive(false);
+
+
+            //triggers dialogue and waits for user input, after that player can move again
+            TurnManager.DialogueInProgress = true;
+            dialogueManager.TriggerDialogue(this, CurrentTile, AIControlled);
+            yield return StartCoroutine(WaitForUserInput());
+
+            //if player answered yes, shop is bought and star is relocated.
+            if (lastInputWasYes)
+            {
+                playerResources.BuyCrystal();
+            }
+
+            //We need to regenerate path, because shop tile ignores movement. this means the path just got 1 tile longer
+            moved = 0;
+            Path = boardManager.GeneratePath(CurrentTile, movement);
+
+            //enable moveCounter again
+            MoveCounter.SetActive(true);
+        }
         //We check here if a tile is a branch tile
         //And we offer the player a choice and change (or dont change) the path of the player
         else if (CurrentTile.tileType == TileType.BranchTile)
@@ -260,10 +298,10 @@ public class Player : MonoBehaviour
 
             //Triggers dialogue and wait for user input, after that player will move again
             TurnManager.DialogueInProgress = true;
-            dialogueManager.TriggerDialogue("Branch", this, CurrentTile);
+            dialogueManager.TriggerDialogue(this, CurrentTile, AIControlled);
             yield return StartCoroutine(WaitForUserInput());
 
-            //Yes represents branch, and no represents dont branch, more or less just a true/false
+            //Yes represents branch, and no represents dont branch
             if (lastInputWasYes)
             {
                 //Move down the branch by generating new path
@@ -299,21 +337,16 @@ public class Player : MonoBehaviour
             endRotation = Quaternion.AngleAxis(-90, transform.up);
             StartCoroutine( CRLerpPlayerToFaceCamera());
 
+
+
+
+            MoveCounter.SetActive(false);
+            yield return new WaitForSeconds(waitBetweenTurns);
+
             //We finished moving
             StartTurnEnd();
 
-            //while (!TurnManager.eventFinished)
-            //{
-            //    yield return null;
 
-            //}
-            //TurnManager.eventFinished = false;
-            yield return new WaitForSeconds(waitBetweenTurns);
-
-
-            //We finished our turn
-
-            TurnManager.TurnInProgress = false;
         }
         #endregion
     }
@@ -324,13 +357,13 @@ public class Player : MonoBehaviour
         {
             float rotPercentage = currentFaceCameraLerp / cameraFaceLerpTime;
             this.transform.rotation = Quaternion.Slerp(startRotationForCameraFace, endRotation, rotPercentage);
-
-
+            
             currentFaceCameraLerp += Time.deltaTime;
             yield return null;
         }
         this.transform.rotation = endRotation;
     }
+
     IEnumerator WaitForUserInput()
     {
         while (TurnManager.DialogueInProgress)
@@ -338,13 +371,9 @@ public class Player : MonoBehaviour
             yield return null;
         }
     }
+
     void StartTurnEnd()
     {
-        //disable dicecounter
-        MoveCounter.SetActive(false);
-
-
-
         //Check if final tile is blue/begin, red or star
         //if blue give player 3 coins, if red subtract 3 coins
 
@@ -352,30 +381,32 @@ public class Player : MonoBehaviour
         {
             case TileType.BeginTile:
                 //Nothing happens on begintile
-                TurnManager.eventFinished = true;
+                TurnManager.TurnInProgress = false;
                 break;
             case TileType.BlueTile:
                 playerResources.CoinCount += 3;
-                TurnManager.eventFinished = true;
+                TurnManager.TurnInProgress = false;
                 break;
             case TileType.RedTile:
                 playerResources.CoinCount -= 3;
-                TurnManager.eventFinished = true;
+                TurnManager.TurnInProgress = false;
                 break;
             case TileType.StarTile:
                 //nothing happens when you end a turn on a star, since the star prompt already happened
-                TurnManager.eventFinished = true;
+                TurnManager.TurnInProgress = false;
+                break;
+            case TileType.ShopTile:
+                //nothing happens when you end a turn on a shop, since the shop prompt already happened
+                TurnManager.TurnInProgress = false;
                 break;
             case TileType.EventTile:
                 //Play an event
                 CurrentTile.TileEvt.runEvent(this);
                 break;
             default:
-                TurnManager.eventFinished = true;
-                //By default nothing special happens
+                TurnManager.TurnInProgress = false;
                 break;
         }
-        
     }
 
     //Update functions
@@ -383,5 +414,4 @@ public class Player : MonoBehaviour
     {
         MoveCounter.transform.rotation = Quaternion.identity;
     }
-
 }

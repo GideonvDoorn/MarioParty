@@ -12528,7 +12528,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 12a455ffcb9be814d82d3a4cf3bb2a92, type: 2}
+  - {fileID: 2100000, guid: f7a6da93a59913d4582acbd97f18a7a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13650,7 +13650,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 12a455ffcb9be814d82d3a4cf3bb2a92, type: 2}
+  - {fileID: 2100000, guid: f7a6da93a59913d4582acbd97f18a7a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15146,7 +15146,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 12a455ffcb9be814d82d3a4cf3bb2a92, type: 2}
+  - {fileID: 2100000, guid: f7a6da93a59913d4582acbd97f18a7a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17600,7 +17600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileIndex: 13
   branchIndex: -1
-  tileType: 1
+  tileType: 6
   BranchButtonText: 
   DontBranchButtonText: 
   TileEvt: {fileID: 0}
@@ -17666,8 +17666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d7dc74376aebf41875579c11ba8fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kanoe: {fileID: 1644331788428366}
-  endPos: {fileID: 4131869742789260}
 --- !u!114 &114190888585015230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -17681,7 +17679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileIndex: 23
   branchIndex: -1
-  tileType: 1
+  tileType: 6
   BranchButtonText: 
   DontBranchButtonText: 
   TileEvt: {fileID: 0}
@@ -17815,8 +17813,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d7dc74376aebf41875579c11ba8fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kanoe: {fileID: 1486088126699098}
-  endPos: {fileID: 4131869742789260}
 --- !u!114 &114352161249729258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -17964,8 +17960,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d7dc74376aebf41875579c11ba8fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kanoe: {fileID: 1644331788428366}
-  endPos: {fileID: 4131869742789260}
 --- !u!114 &114495038183855274
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -18030,7 +18024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileIndex: 32
   branchIndex: -1
-  tileType: 1
+  tileType: 6
   BranchButtonText: 
   DontBranchButtonText: 
   TileEvt: {fileID: 0}
@@ -18300,7 +18294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ffee5bcf7566941b121ddc48ddea24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LegalStarSpawnTiles: 030000000700000009000000080000000d000000110000001200000016000000190000001c0000001d0000002000000024000000280000002a0000002c000000
+  LegalStarSpawnTiles: 030000000700000009000000080000002a000000110000001200000016000000190000001c0000001d0000002c0000002400000028000000
   BlueTileMaterial: {fileID: 2100000, guid: 12a455ffcb9be814d82d3a4cf3bb2a92, type: 2}
   RedTileMaterial: {fileID: 2100000, guid: 03ac197befba94e438307329b769f2d5, type: 2}
   StarTileMaterial: {fileID: 2100000, guid: 577e1143625ccfd49942456fcaaa8436, type: 2}
@@ -18317,8 +18311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d7dc74376aebf41875579c11ba8fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kanoe: {fileID: 1859962221835436}
-  endPos: {fileID: 4131869742789260}
 --- !u!114 &114921789245457258
 MonoBehaviour:
   m_ObjectHideFlags: 1
